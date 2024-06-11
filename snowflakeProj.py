@@ -1,9 +1,52 @@
-import os 
-import pandas as pd 
+import os
+import pandas as pd
 import snowflake.connector
-import streamlit as st 
+import streamlit as st
 from io import StringIO
 
+# Configuration de la connexion Snowflake
+SNOWFLAKE_USER = 'votre_utilisateur'
+SNOWFLAKE_PASSWORD = 'votre_mot_de_passe'
+SNOWFLAKE_ACCOUNT = 'votre_compte'
+SNOWFLAKE_DATABASE = 'votre_base_de_donnees'
+SNOWFLAKE_SCHEMA = 'votre_schema'
+SNOWFLAKE_WAREHOUSE = 'votre_entrepot'
+
+# Fonction pour se connecter à Snowflake
+def get_snowflake_connection():
+    conn = snowflake.connector.connect(
+        user=SNOWFLAKE_USER,
+        password=SNOWFLAKE_PASSWORD,
+        account=SNOWFLAKE_ACCOUNT,
+        database=SNOWFLAKE_DATABASE,
+        schema=SNOWFLAKE_SCHEMA,
+        warehouse=SNOWFLAKE_WAREHOUSE
+    )
+    return conn
+
+# Fonction pour téléverser un DataFrame dans Snowflake
+def upload_to_snowflake(conn, df, table_name):
+    cursor = conn.cursor()
+    # Crée la table si elle n'existe pas
+    create_table_query = f"""
+    CREATE TABLE IF NOT EXISTS {table_name} (
+        {', '.join([f"{col} STRING" for col in df.columns])}
+    )
+    """
+    cursor.execute(create_table_query)
+
+    # Prépare les données pour l'insertion
+    for i, row in df.iterrows():
+        insert_query = f"""
+        INSERT INTO {table_name} ({', '.join(df.columns)})
+        VALUES ({', '.join(['%s'] * len(row))})
+        """
+        cursor.execute(insert_query, tuple(row))
+    conn.commit()
+    cursor.close()
+
+# Interface utilisateur Streamlit
+st.title("Bienvenue")
 
 page = st.sidebar.selectbox("Veuillez choisir votre page:", ["Accueil", "Dépôt"])
 
@@ -12,9 +55,9 @@ if page == "Accueil":
 elif page == "Dépôt":
     st.subheader("Ici vous pouvez faire votre téléversement")
     
-    file_upload = st.file_uploader("Sélectionnez le fichier CSV à upload", type="csv")
-    delimiter = st.selectbox("Choisissez le délimiteur du fichier", [",", ";","_"])
-    quotechar = st.selectbox("Choisissez le caractère de citation", ['"', "'", " "])
+    file_upload = st.file_uploader("Sélectionnez le fichier CSV à uploader", type="csv")
+    delimiter = st.selectbox("Choisissez le délimiteur du fichier", [",", ";", " ", "-", "_"])
+    quotechar = st.selectbox("Choisissez le caractère de citation", ['"', "'", ""])
     skip_rows = st.number_input("Nombre de lignes à ignorer au début", min_value=0, step=1, value=0)
     skip_blank_lines = st.checkbox("Ignorer les lignes blanches", value=True)
     
@@ -23,14 +66,17 @@ elif page == "Dépôt":
         s = str(bytes_data, 'utf-8')
         data = StringIO(s)
         
-        # Afficher l'aperçu des données en fonction du délimiteur choisi
         try:
+            # Si aucun caractère de citation n'est choisi, utiliser None
+            quotechar_option = quotechar if quotechar else None
+            
             df = pd.read_csv(
                 data, 
                 delimiter=delimiter, 
-                quotechar=quotechar if quotechar else None,
+                quotechar=quotechar_option,
                 skiprows=skip_rows,
-                skip_blank_lines=skip_blank_lines
+                skip_blank_lines=skip_blank_lines,
+                doublequote=True # Gérer les guillemets doubles correctement
             )
             st.write("Aperçu du fichier téléversé :")
             st.dataframe(df)
