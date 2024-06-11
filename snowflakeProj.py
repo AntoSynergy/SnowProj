@@ -57,8 +57,6 @@ elif page == "Dépôt":
     
     file_upload = st.file_uploader("Sélectionnez le fichier CSV à uploader", type="csv")
     delimiter = st.selectbox("Choisissez le délimiteur du fichier", [",", ";", " ", "-", "_"])
-    quotechar_options = ['Aucun', '"', "'"]
-    quotechar = st.selectbox("Choisissez le caractère de citation", quotechar_options)
     skip_rows = st.number_input("Nombre de lignes à ignorer au début", min_value=0, step=1, value=0)
     skip_blank_lines = st.checkbox("Ignorer les lignes blanches", value=True)
     
@@ -69,23 +67,11 @@ elif page == "Dépôt":
         
         try:
             # Si "Aucun" est sélectionné, quoting est désactivé
-            if quotechar == 'Aucun':
                 df = pd.read_csv(
                     data, 
                     delimiter=delimiter, 
-                    quotechar=None,
                     skiprows=skip_rows,
                     skip_blank_lines=skip_blank_lines,
-                    doublequote=False # Pas besoin de traiter les guillemets doubles
-                )
-            else:
-                df = pd.read_csv(
-                    data, 
-                    delimiter=delimiter, 
-                    quotechar=quotechar,
-                    skiprows=skip_rows,
-                    skip_blank_lines=skip_blank_lines,
-                    doublequote=True # Gérer les guillemets doubles correctement
                 )
             
             st.write("Aperçu du fichier téléversé :")
