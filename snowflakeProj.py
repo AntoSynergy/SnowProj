@@ -2,9 +2,9 @@ import os
 import pandas as pd
 import snowflake.connector
 import streamlit as st
-from io import StringIO
 import matplotlib.pyplot as plt
 import seaborn as sns
+from io import StringIO
 
 # Configuration de la connexion Snowflake
 SNOWFLAKE_USER = os.getenv('SECRET_USER')
@@ -73,7 +73,7 @@ elif page == "Dépôt":
                 delimiter=delimiter, 
                 skiprows=skip_rows,
                 skip_blank_lines=skip_blank_lines,
-                doublequote=True # Gérer les guillemets doubles correctement
+                doublequote=True  # Gérer les guillemets doubles correctement
             )
             
             st.write("Aperçu du fichier téléversé :")
@@ -91,59 +91,60 @@ elif page == "Dépôt":
             else:
                 st.error("Veuillez saisir un nom de table.")
 
-if page == "Analyse":
-    # Fonction d'analyse de la qualité des données
-    def analyze_data_quality(df):
-        st.subheader("Analyse de la qualité des données")
-        
-        # Création de deux colonnes pour afficher les tableaux côte à côte
-        col1, col2 = st.columns(2)
-        
-        # Vérification des doublons par colonne
-        with col1:
-            st.write("Nombre de doublons par colonne :")
-            for col in df.columns:
-                duplicates = df[df.duplicated(subset=[col], keep=False)]
-                duplicates_count = duplicates[col].value_counts()
-                if len(duplicates_count) > 0:
-                    st.write(f"Colonne '{col}' :")
-                    st.write(duplicates_count)
-                else:
-                    st.write(f"Colonne '{col}' : Aucun doublon trouvé.")
-        
-        # Comptage des valeurs manquantes par colonne
-        with col2:
-            st.write("Nombre de valeurs manquantes par colonne :")
-            missing_values_count = df.isnull().sum()
-            st.write(missing_values_count)
-            
-            # Affichage de l'histogramme des valeurs manquantes par colonne
-            st.write("Histogramme des valeurs manquantes par colonne :")
-            fig, ax = plt.subplots()
-            missing_values_count.plot(kind='bar', ax=ax)
-            plt.title("Histogramme des valeurs manquantes par colonne")
-            plt.xlabel("Colonnes")
-            plt.ylabel("Nombre de valeurs manquantes")
-            st.pyplot(fig)
-            
-            # Vérification de l'uniformité des données par colonne
-            st.write("Distribution des valeurs par colonne :")
-            for col in df.columns:
-                st.write(f"Colonne '{col}' :")
-                fig, ax = plt.subplots()
-                df[col].value_counts().plot(kind='bar', ax=ax)
-                st.pyplot(fig)
-        
-        # Autres analyses de qualité des données à ajouter selon vos besoins
+elif page == "Analyse":
+    st.subheader("Analyse des données")
 
-    # Chargement du fichier CSV
-    file_upload = st.file_uploader("Sélectionnez le fichier CSV à analyser", type="CSV")
-
+    # Chargement du fichier CSV pour l'analyse
+    file_upload = st.file_uploader("Sélectionnez le fichier CSV à analyser", type="csv")
+    
     if file_upload is not None:
         df = pd.read_csv(file_upload)
         
         st.subheader("Aperçu des données")
         st.write(df)
         
-        # Appeler la fonction d'analyse de la qualité des données
-        analyze_data_quality(df)
+        st.subheader("Analyse de la qualité des données")
+        
+        # Analyse des doublons par colonne
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write("Nombre de doublons par colonne")
+            duplicates_info = {col: df[col].duplicated().sum() for col in df.columns}
+            st.write(duplicates_info)
+            
+            st.write("Détails des doublons par colonne")
+            for col in df.columns:
+                duplicated_values = df[df.duplicated([col], keep=False)][col].value_counts()
+                st.write(f"{col} - Valeurs dupliquées")
+                st.write(duplicated_values)
+                
+        with col2:
+            # Analyse des valeurs manquantes
+            st.write("Nombre de valeurs manquantes par colonne")
+            missing_values = df.isnull().sum()
+            st.write(missing_values)
+            
+            # Visualisation des valeurs manquantes
+            st.write("Histogramme des valeurs manquantes")
+            fig, ax = plt.subplots()
+            missing_values.plot(kind='bar', ax=ax)
+            ax.set_title("Valeurs manquantes par colonne")
+            ax.set_xlabel("Colonnes")
+            ax.set_ylabel("Nombre de valeurs manquantes")
+            st.pyplot(fig)
+            
+        # Autres analyses possibles de la qualité des données
+        st.write("Analyse de l'uniformité des données")
+        uniformity_info = {col: df[col].value_counts(normalize=True).max() for col in df.columns}
+        st.write(uniformity_info)
+
+        # Visualisation de l'uniformité
+        st.write("Histogramme de l'uniformité des données")
+        uniformity_series = pd.Series(uniformity_info)
+        fig, ax = plt.subplots()
+        uniformity_series.plot(kind='bar', ax=ax)
+        ax.set_title("Uniformité des données par colonne")
+        ax.set_xlabel("Colonnes")
+        ax.set_ylabel("Proportion de la valeur la plus fréquente")
+        st.pyplot(fig)
