@@ -23,6 +23,6 @@ elif Page=="Dépôt":
         st.stop()
                 
                 # Afficher les premières lignes du DataFrame
-        st.write("Aperçu des données :")
-        st.write(df.head())
+    st.write("Aperçu des données :")
+    st.write(df.head())
       
