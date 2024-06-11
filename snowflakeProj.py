@@ -23,7 +23,7 @@ def get_snowflake_connection():
         warehouse=SNOWFLAKE_WAREHOUSE
     )
     return conn
-    print(user)
+
 # Fonction pour téléverser un DataFrame dans Snowflake
 def upload_to_snowflake(conn, df, table_name):
     cursor = conn.cursor()
@@ -44,6 +44,15 @@ def upload_to_snowflake(conn, df, table_name):
         cursor.execute(insert_query, tuple(row))
     conn.commit()
     cursor.close()
+
+# Fonction d'analyse de la qualité des données
+def analyze_data_quality(df):
+    st.subheader("Analyse de la qualité des données")
+    
+    # Vérification des doublons
+    st.write("Nombre de lignes dupliquées :", df.duplicated().sum())
+    
+    # Autres analyses de qualité des données à ajouter selon vos besoins
 
 # Interface utilisateur Streamlit
 st.title("Bienvenue")
@@ -89,24 +98,10 @@ elif page == "Dépôt":
             else:
                 st.error("Veuillez saisir un nom de table.")
 
-if page=="Analyse": 
-    # Fonction d'analyse de la qualité des données
-def analyze_data_quality(df):
-    st.subheader("Analyse de la qualité des données")
-    
-    # Vérification des doublons
-    st.write("Nombre de lignes dupliquées :", df.duplicated().sum())
-    
-    # Autres analyses de qualité des données à ajouter selon vos besoins
-    
-# Chargement du fichier CSV
-file_upload = st.file_uploader("Sélectionnez le fichier CSV à analyser", type="CSV")
-
-if file_upload is not None:
-    df = pd.read_csv(file_upload)
-    
-    st.subheader("Aperçu des données")
-    st.write(df)
-    
-    # Appeler la fonction d'analyse de la qualité des données
-    analyze_data_quality(df)
+elif page == "Analyse":
+    file_upload = st.file_uploader("Sélectionnez le fichier CSV à analyser", type="CSV")
+    if file_upload is not None:
+        df = pd.read_csv(file_upload)
+        st.subheader("Aperçu des données")
+        st.write(df)
+        analyze_data_quality(df)
