@@ -48,7 +48,7 @@ def upload_to_snowflake(conn, df, table_name):
 # Interface utilisateur Streamlit
 st.title("Bienvenue")
 
-page = st.sidebar.selectbox("Veuillez choisir votre page:", ["Accueil", "Dépôt"])
+page = st.sidebar.selectbox("Veuillez choisir votre page:", ["Accueil", "Dépôt","Analyse"])
 
 if page == "Accueil":
     st.subheader("Bienvenue sur le dépôt officiel dédié à téléverser des fichiers sur Snowflake")
@@ -88,3 +88,25 @@ elif page == "Dépôt":
                 st.success(f"Les données ont été téléversées dans la table {table_name} de Snowflake avec succès.")
             else:
                 st.error("Veuillez saisir un nom de table.")
+
+elif page=="Analyse": 
+    # Fonction d'analyse de la qualité des données
+def analyze_data_quality(df):
+    st.subheader("Analyse de la qualité des données")
+    
+    # Vérification des doublons
+    st.write("Nombre de lignes dupliquées :", df.duplicated().sum())
+    
+    # Autres analyses de qualité des données à ajouter selon vos besoins
+    
+# Chargement du fichier CSV
+file_upload = st.file_uploader("Sélectionnez le fichier CSV à analyser", type="CSV")
+
+if file_upload is not None:
+    df = pd.read_csv(file_upload)
+    
+    st.subheader("Aperçu des données")
+    st.write(df)
+    
+    # Appeler la fonction d'analyse de la qualité des données
+    analyze_data_quality(df)
