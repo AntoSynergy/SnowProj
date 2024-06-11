@@ -57,7 +57,8 @@ elif page == "Dépôt":
     
     file_upload = st.file_uploader("Sélectionnez le fichier CSV à uploader", type="csv")
     delimiter = st.selectbox("Choisissez le délimiteur du fichier", [",", ";", " ", "-", "_"])
-    quotechar = st.selectbox("Choisissez le caractère de citation", ['"', "'", ""])
+    quotechar_options = ['Aucun', '"', "'"]
+    quotechar = st.selectbox("Choisissez le caractère de citation", quotechar_options)
     skip_rows = st.number_input("Nombre de lignes à ignorer au début", min_value=0, step=1, value=0)
     skip_blank_lines = st.checkbox("Ignorer les lignes blanches", value=True)
     
@@ -67,8 +68,8 @@ elif page == "Dépôt":
         data = StringIO(s)
         
         try:
-            # Si aucun caractère de citation n'est choisi, utiliser None
-            quotechar_option = quotechar if quotechar else None
+            # Si "Aucun" est sélectionné, quotechar est None
+            quotechar_option = None if quotechar == 'Aucun' else quotechar
             
             df = pd.read_csv(
                 data, 
