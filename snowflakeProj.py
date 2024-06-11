@@ -3,6 +3,8 @@ import pandas as pd
 import snowflake.connector
 import streamlit as st
 from io import StringIO
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Configuration de la connexion Snowflake
 SNOWFLAKE_USER = os.getenv('SECRET_USER')
@@ -46,13 +48,12 @@ def upload_to_snowflake(conn, df, table_name):
     cursor.close()
 
 # Interface utilisateur Streamlit
-
+st.title("Bienvenue")
 
 page = st.sidebar.selectbox("Veuillez choisir votre page:", ["Accueil", "Dépôt", "Analyse"])
 
 if page == "Accueil":
-    st.title("Bienvenue")
-    st.subheader("Ceci est l'application officielle dédié à téléverser des fichiers sur Snowflake et à des tests de Data Quality")
+    st.subheader("Bienvenue sur le dépôt officiel dédié à téléverser des fichiers sur Snowflake")
 elif page == "Dépôt":
     st.subheader("Ici vous pouvez faire votre téléversement")
     
@@ -90,8 +91,7 @@ elif page == "Dépôt":
             else:
                 st.error("Veuillez saisir un nom de table.")
 
-elif page == "Analyse":
-    # Fonction d'analyse de la qualité des données
+if page == "Analyse":
     # Fonction d'analyse de la qualité des données
     def analyze_data_quality(df):
         st.subheader("Analyse de la qualité des données")
@@ -116,9 +116,25 @@ elif page == "Analyse":
             st.write("Nombre de valeurs manquantes par colonne :")
             missing_values_count = df.isnull().sum()
             st.write(missing_values_count)
+            
+            # Affichage de l'histogramme des valeurs manquantes par colonne
+            st.write("Histogramme des valeurs manquantes par colonne :")
+            fig, ax = plt.subplots()
+            missing_values_count.plot(kind='bar', ax=ax)
+            plt.title("Histogramme des valeurs manquantes par colonne")
+            plt.xlabel("Colonnes")
+            plt.ylabel("Nombre de valeurs manquantes")
+            st.pyplot(fig)
+            
+            # Vérification de l'uniformité des données par colonne
+            st.write("Distribution des valeurs par colonne :")
+            for col in df.columns:
+                st.write(f"Colonne '{col}' :")
+                fig, ax = plt.subplots()
+                df[col].value_counts().plot(kind='bar', ax=ax)
+                st.pyplot(fig)
         
         # Autres analyses de qualité des données à ajouter selon vos besoins
-
 
     # Chargement du fichier CSV
     file_upload = st.file_uploader("Sélectionnez le fichier CSV à analyser", type="CSV")
