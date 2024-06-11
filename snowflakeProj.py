@@ -46,12 +46,13 @@ def upload_to_snowflake(conn, df, table_name):
     cursor.close()
 
 # Interface utilisateur Streamlit
-st.title("Bienvenue")
+
 
 page = st.sidebar.selectbox("Veuillez choisir votre page:", ["Accueil", "Dépôt", "Analyse"])
 
 if page == "Accueil":
-    st.subheader("Bienvenue sur l'application officielle dédié à téléverser des fichiers sur Snowflake et à des tests de Data Quality")
+    st.title("Bienvenue")
+    st.subheader("Ceci est l'application officielle dédié à téléverser des fichiers sur Snowflake et à des tests de Data Quality")
 elif page == "Dépôt":
     st.subheader("Ici vous pouvez faire votre téléversement")
     
