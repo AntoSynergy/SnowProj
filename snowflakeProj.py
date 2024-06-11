@@ -14,7 +14,7 @@ elif page == "Dépôt":
     
     file_upload = st.file_uploader("Sélectionnez le fichier CSV à upload", type="csv")
     delimiter = st.selectbox("Choisissez le délimiteur du fichier", [",", ";","_"])
-    quotechar = st.selectbox("Choisissez le caractère de citation", ['"', "'", "None"])
+    quotechar = st.selectbox("Choisissez le caractère de citation", ['"', "'", " "])
     skip_rows = st.number_input("Nombre de lignes à ignorer au début", min_value=0, step=1, value=0)
     skip_blank_lines = st.checkbox("Ignorer les lignes blanches", value=True)
     
@@ -28,8 +28,7 @@ elif page == "Dépôt":
             df = pd.read_csv(
                 data, 
                 delimiter=delimiter, 
-                if quotechar != None : 
-                    quotechar=quotechar if quotechar else None,
+                quotechar=quotechar if quotechar else None,
                 skiprows=skip_rows,
                 skip_blank_lines=skip_blank_lines
             )
