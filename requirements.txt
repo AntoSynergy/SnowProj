@@ -1,3 +1,5 @@
 streamlit
-snowflake-connector-python
 pandas
+snowflake-connector-python
+matplotlib
+seaborn
