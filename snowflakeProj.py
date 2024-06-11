@@ -6,25 +6,9 @@ from io import StringIO
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Configuration de la connexion Snowflake
-SNOWFLAKE_USER = os.getenv('SECRET_USER')
-SNOWFLAKE_PASSWORD = os.getenv('SECRET_PASSWORD')
-SNOWFLAKE_ACCOUNT = os.getenv('SECRET_ACCOUNT')
-SNOWFLAKE_DATABASE = 'SNOWPROJ'
-SNOWFLAKE_SCHEMA = 'PUBLIC'
-SNOWFLAKE_WAREHOUSE = 'COMPUTE_WH'
 
-# Fonction pour se connecter à Snowflake
-def get_snowflake_connection():
-    conn = snowflake.connector.connect(
-        user=SNOWFLAKE_USER,
-        password=SNOWFLAKE_PASSWORD,
-        account=SNOWFLAKE_ACCOUNT,
-        database=SNOWFLAKE_DATABASE,
-        schema=SNOWFLAKE_SCHEMA,
-        warehouse=SNOWFLAKE_WAREHOUSE
-    )
-    return conn
+
+conn=st.connection("Snowflake")
 
 # Fonction pour téléverser un DataFrame dans Snowflake
 def upload_to_snowflake(conn, df, table_name):
