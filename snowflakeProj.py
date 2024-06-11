@@ -91,27 +91,33 @@ elif page == "Dépôt":
 
 elif page == "Analyse":
     # Fonction d'analyse de la qualité des données
+    # Fonction d'analyse de la qualité des données
     def analyze_data_quality(df):
         st.subheader("Analyse de la qualité des données")
-    
-    # Vérification des doublons par colonne
-        st.write("Nombre de doublons par colonne :")
-        for col in df.columns:
-            duplicates = df[df.duplicated(subset=[col], keep=False)]
-            duplicates_count = duplicates[col].value_counts()
-            if len(duplicates_count) > 0:
-                st.write(f"Colonne '{col}' :")
-                st.write(duplicates_count)
-            else:
-                st.write(f"Colonne '{col}' : Aucun doublon trouvé.")
-    
-    # Autres analyses de qualité des données à ajouter selon vos besoins
+        
+        # Création de deux colonnes pour afficher les tableaux côte à côte
+        col1, col2 = st.columns(2)
+        
+        # Vérification des doublons par colonne
+        with col1:
+            st.write("Nombre de doublons par colonne :")
+            for col in df.columns:
+                duplicates = df[df.duplicated(subset=[col], keep=False)]
+                duplicates_count = duplicates[col].value_counts()
+                if len(duplicates_count) > 0:
+                    st.write(f"Colonne '{col}' :")
+                    st.write(duplicates_count)
+                else:
+                    st.write(f"Colonne '{col}' : Aucun doublon trouvé.")
+        
         # Comptage des valeurs manquantes par colonne
-        st.write("\nNombre de valeurs manquantes par colonne :")
-        missing_values_count = df.isnull().sum()
-        st.write(missing_values_count)
+        with col2:
+            st.write("Nombre de valeurs manquantes par colonne :")
+            missing_values_count = df.isnull().sum()
+            st.write(missing_values_count)
         
         # Autres analyses de qualité des données à ajouter selon vos besoins
+
 
     # Chargement du fichier CSV
     file_upload = st.file_uploader("Sélectionnez le fichier CSV à analyser", type="CSV")
