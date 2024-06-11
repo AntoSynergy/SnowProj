@@ -2,10 +2,8 @@ import os
 import pandas as pd 
 import snowflake.connector
 import streamlit as st 
+from io import StringIO
 
-
-# Interface utilisateur Streamlit
-st.title("Bienvenue")
 
 page = st.sidebar.selectbox("Veuillez choisir votre page:", ["Accueil", "Dépôt"])
 
