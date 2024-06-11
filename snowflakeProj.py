@@ -4,7 +4,7 @@ import snowflake.connector
 import streamlit as st 
 
 st.title("Bienvenue")
-Page=st.selectbox(["Accueil","Dépôt"])
+Page=st.selectbox("Veuillez choisir votre page:",["Accueil","Dépôt"])
 if Page=="Accueil": 
   st.title("Bienvenue sur le dépôt officiel dédié à téléversé des fichiers sur Snowflake")
 elif Page=="Dépôt": 
