@@ -13,7 +13,7 @@ elif page == "Dépôt":
     st.subheader("Ici vous pouvez faire votre téléversement")
     
     file_upload = st.file_uploader("Sélectionnez le fichier CSV à upload", type="csv")
-    delimiter = st.selectbox("Choisissez le délimiteur du fichier", [",", ";", " ", "-", "_"])
+    delimiter = st.selectbox("Choisissez le délimiteur du fichier", [",", ";","_"])
     
     if file_upload is not None:
         bytes_data = file_upload.read()
