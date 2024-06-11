@@ -5,12 +5,12 @@ import streamlit as st
 from io import StringIO
 
 # Configuration de la connexion Snowflake
-SNOWFLAKE_USER = 'votre_utilisateur'
-SNOWFLAKE_PASSWORD = 'votre_mot_de_passe'
-SNOWFLAKE_ACCOUNT = 'votre_compte'
-SNOWFLAKE_DATABASE = 'votre_base_de_donnees'
-SNOWFLAKE_SCHEMA = 'votre_schema'
-SNOWFLAKE_WAREHOUSE = 'votre_entrepot'
+SNOWFLAKE_USER = os.getenv('SECRET_USER')
+SNOWFLAKE_PASSWORD = os.getenv('SECRET_PASSWORD')
+SNOWFLAKE_ACCOUNT = os.getenv('SECRET_ACCOUNT')
+SNOWFLAKE_DATABASE = 'SNOWPROJ'
+SNOWFLAKE_SCHEMA = 'PUBLIC'
+SNOWFLAKE_WAREHOUSE = 'COMPUTE_WH'
 
 # Fonction pour se connecter à Snowflake
 def get_snowflake_connection():
