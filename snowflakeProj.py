@@ -23,7 +23,7 @@ def get_snowflake_connection():
         warehouse=SNOWFLAKE_WAREHOUSE
     )
     return conn
-
+    print(user)
 # Fonction pour téléverser un DataFrame dans Snowflake
 def upload_to_snowflake(conn, df, table_name):
     cursor = conn.cursor()
