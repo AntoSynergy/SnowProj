@@ -39,13 +39,10 @@ elif page == "Dépôt":
         
         table_name = st.text_input("Nom de la table dans Snowflake :")
         
-        if st.button('Confirmer le téléversement'):
+        if st.button('Valider le téléchargement'):
             if table_name:
-                try:
-                    conn = get_snowflake_connection()
-                    upload_to_snowflake(conn, df, table_name)
-                    st.success(f"Les données ont été téléversées dans la table {table_name} de Snowflake avec succès.")
-                except Exception as e:
-                    st.error(f"Erreur lors du téléversement des données : {e}")
+                conn = get_snowflake_connection()
+                upload_to_snowflake(conn, df, table_name)
+                st.success(f"Les données ont été téléversées dans la table {table_name} de Snowflake avec succès.")
             else:
                 st.error("Veuillez saisir un nom de table.")
