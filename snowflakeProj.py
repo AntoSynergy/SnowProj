@@ -6,7 +6,7 @@ from io import StringIO
 
 # Configuration de la connexion Snowflake
 SNOWFLAKE_USER = os.getenv('SECRET_USER')
-print(SNOWFLAKE_USER)
+st.text(SNOWFLAKE_USER)
 SNOWFLAKE_PASSWORD = os.getenv('SECRET_PASSWORD')
 SNOWFLAKE_ACCOUNT = os.getenv('SECRET_ACCOUNT')
 SNOWFLAKE_DATABASE = 'SNOWPROJ'
