@@ -89,7 +89,7 @@ elif page == "Dépôt":
             else:
                 st.error("Veuillez saisir un nom de table.")
 
-elif page=="Analyse": 
+if page=="Analyse": 
     # Fonction d'analyse de la qualité des données
 def analyze_data_quality(df):
     st.subheader("Analyse de la qualité des données")
