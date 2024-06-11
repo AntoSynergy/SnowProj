@@ -68,17 +68,26 @@ elif page == "Dépôt":
         data = StringIO(s)
         
         try:
-            # Si "Aucun" est sélectionné, quotechar est None
-            quotechar_option = None if quotechar == 'Aucun' else quotechar
+            # Si "Aucun" est sélectionné, quoting est désactivé
+            if quotechar == 'Aucun':
+                df = pd.read_csv(
+                    data, 
+                    delimiter=delimiter, 
+                    quotechar=None,
+                    skiprows=skip_rows,
+                    skip_blank_lines=skip_blank_lines,
+                    doublequote=False # Pas besoin de traiter les guillemets doubles
+                )
+            else:
+                df = pd.read_csv(
+                    data, 
+                    delimiter=delimiter, 
+                    quotechar=quotechar,
+                    skiprows=skip_rows,
+                    skip_blank_lines=skip_blank_lines,
+                    doublequote=True # Gérer les guillemets doubles correctement
+                )
             
-            df = pd.read_csv(
-                data, 
-                delimiter=delimiter, 
-                quotechar=quotechar_option,
-                skiprows=skip_rows,
-                skip_blank_lines=skip_blank_lines,
-                doublequote=True # Gérer les guillemets doubles correctement
-            )
             st.write("Aperçu du fichier téléversé :")
             st.dataframe(df)
         except Exception as e:
