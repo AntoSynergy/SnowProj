@@ -11,5 +11,5 @@ import seaborn as sns
 
 conn=st.connection("snowflake")
 session=conn.session()
-
+df = conn.query("SELECT * from mytable;", ttl=600)
 
