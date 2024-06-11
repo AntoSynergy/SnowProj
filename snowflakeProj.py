@@ -51,7 +51,7 @@ st.title("Bienvenue")
 page = st.sidebar.selectbox("Veuillez choisir votre page:", ["Accueil", "Dépôt", "Analyse"])
 
 if page == "Accueil":
-    st.subheader("Bienvenue sur le dépôt officiel dédié à téléverser des fichiers sur Snowflake")
+    st.subheader("Bienvenue sur l'application officielle dédié à téléverser des fichiers sur Snowflake et à des tests de Data Quality")
 elif page == "Dépôt":
     st.subheader("Ici vous pouvez faire votre téléversement")
     
