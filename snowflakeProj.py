@@ -11,7 +11,7 @@ elif Page=="Dépôt":
   st.subheader("Ici vous pouvez faire votre téléversement")
   file_upload=st.file_uploader("Selectionnez le fichier CSV à upload",type="CSV")
   delimiter=st.selectbox("Choisissez le delimiter du fichier",[",",";"," ","-","_"])
-  if file_upload is not none:   
+  if file_upload is not None:   
     
     df=df.read_csv(file_upload,sep=delimiter)
     st.write(df.head())
