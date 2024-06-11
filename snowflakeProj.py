@@ -92,13 +92,21 @@ elif page == "Dépôt":
 elif page == "Analyse":
     # Fonction d'analyse de la qualité des données
     def analyze_data_quality(df):
-        st.subheader("Analyse de la qualité des données")
-        
-        # Vérification des doublons par colonne
-        st.write("Nombre de doublons par colonne :")
-        for col in df.columns:
-            duplicates_count = df[col].duplicated().sum()
-            st.write(f"- Colonne '{col}' : {duplicates_count}")
+    st.subheader("Analyse de la qualité des données")
+    
+    # Vérification des doublons par colonne
+    st.write("Nombre de doublons par colonne :")
+    for col in df.columns:
+        duplicates = df[df.duplicated(subset=[col], keep=False)]
+        duplicates_count = duplicates[col].value_counts()
+        if len(duplicates_count) > 0:
+            st.write(f"Colonne '{col}' :")
+            st.write(duplicates_count)
+        else:
+            st.write(f"Colonne '{col}' : Aucun doublon trouvé.")
+    
+    # Autres analyses de qualité des données à ajouter selon vos besoins
+
         
         # Autres analyses de qualité des données à ajouter selon vos besoins
 
