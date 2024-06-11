@@ -4,14 +4,20 @@ import snowflake.connector
 import streamlit as st 
 
 
-Page=st.sidebar.selectbox("Veuillez choisir votre page:",["Accueil","Dépôt"])
-if Page=="Accueil": 
-  st.subheader("Bienvenue sur le dépôt officiel dédié à téléverser des fichiers sur Snowflake")
-elif Page=="Dépôt": 
-  st.subheader("Ici vous pouvez faire votre téléversement")
-  file_upload=st.file_uploader("Selectionnez le fichier CSV à upload",type="CSV")
-  delimiter=st.selectbox("Choisissez le delimiter du fichier",[",",";"," ","-","_"])
- if file_upload is not None:
+# Interface utilisateur Streamlit
+st.title("Bienvenue")
+
+page = st.sidebar.selectbox("Veuillez choisir votre page:", ["Accueil", "Dépôt"])
+
+if page == "Accueil":
+    st.subheader("Bienvenue sur le dépôt officiel dédié à téléverser des fichiers sur Snowflake")
+elif page == "Dépôt":
+    st.subheader("Ici vous pouvez faire votre téléversement")
+    
+    file_upload = st.file_uploader("Sélectionnez le fichier CSV à upload", type="csv")
+    delimiter = st.selectbox("Choisissez le délimiteur du fichier", [",", ";", " ", "-", "_"])
+    
+    if file_upload is not None:
         bytes_data = file_upload.read()
         s = str(bytes_data, 'utf-8')
         data = StringIO(s)
@@ -36,4 +42,3 @@ elif Page=="Dépôt":
                     st.error(f"Erreur lors du téléversement des données : {e}")
             else:
                 st.error("Veuillez saisir un nom de table.")
-      
