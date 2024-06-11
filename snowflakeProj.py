@@ -66,13 +66,13 @@ elif page == "Dépôt":
         data = StringIO(s)
         
         try:
-            # Si "Aucun" est sélectionné, quoting est désactivé
-                df = pd.read_csv(
-                    data, 
-                    delimiter=delimiter, 
-                    skiprows=skip_rows,
-                    skip_blank_lines=skip_blank_lines,
-                )
+            df = pd.read_csv(
+                data, 
+                delimiter=delimiter, 
+                skiprows=skip_rows,
+                skip_blank_lines=skip_blank_lines,
+                doublequote=True # Gérer les guillemets doubles correctement
+            )
             
             st.write("Aperçu du fichier téléversé :")
             st.dataframe(df)
