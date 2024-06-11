@@ -106,7 +106,10 @@ elif page == "Analyse":
                 st.write(f"Colonne '{col}' : Aucun doublon trouvé.")
     
     # Autres analyses de qualité des données à ajouter selon vos besoins
-
+        # Comptage des valeurs manquantes par colonne
+        st.write("\nNombre de valeurs manquantes par colonne :")
+        missing_values_count = df.isnull().sum()
+        st.write(missing_values_count)
         
         # Autres analyses de qualité des données à ajouter selon vos besoins
 
