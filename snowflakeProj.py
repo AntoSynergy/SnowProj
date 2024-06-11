@@ -9,7 +9,7 @@ import seaborn as sns
 
 # connection à snowflake 
 
-conn=st.connection("Snowflake")
+conn=st.connection("snowflake")
 #session=conn.session()
 
 # Fonction pour téléverser un DataFrame dans Snowflake
