@@ -14,5 +14,6 @@ elif Page=="Dépôt":
   if file_upload is not None:   
     
     bytes_data=file_upload.read()
+    bytes_data.show()
     validate=st.button("Valider le téléchargement")
   
