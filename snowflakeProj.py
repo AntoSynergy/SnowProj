@@ -104,4 +104,9 @@ elif page == "Analyse":
         df = pd.read_csv(file_upload)
         st.subheader("Aperçu des données")
         st.write(df)
+            # Vérification des doublons par colonne
+    st.write("Nombre de doublons par colonne :")
+    for col in df.columns:
+        duplicates_count = df[col].duplicated().sum()
+        st.write(f"- Colonne '{col}' : {duplicates_count}")
         analyze_data_quality(df)
