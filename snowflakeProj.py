@@ -13,7 +13,6 @@ elif Page=="Dépôt":
   delimiter=st.selectbox("Choisissez le delimiter du fichier",[",",";"," ","-","_"])
   if file_upload is not None:   
     
-    df=df.read_csv(file_upload,sep=delimiter)
-    st.write(df.head())
+    bytes_data=file_upload.read()
     validate=st.button("Valider le téléchargement")
   
