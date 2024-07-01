@@ -36,7 +36,7 @@ SNOWFLAKE_WAREHOUSE = 'COMPUTE_WH'
 #        {', '.join([f"{col} STRING" for col in df.columns])}
 #    )
 #    """
-    cursor.execute(create_table_query)
+#    cursor.execute(create_table_query)
 
     # Prépare les données pour l'insertion
     for i, row in df.iterrows():
